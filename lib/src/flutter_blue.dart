@@ -27,7 +27,7 @@ class FlutterBlue {
     });
 
     // Send the log level to the underlying platforms.
-    setLogLevel(logLevel);
+    _setLogLevelIfAvailable();
   }
   static FlutterBlue _instance = new FlutterBlue._();
   static FlutterBlue get instance => _instance;
@@ -57,6 +57,13 @@ class FlutterBlue {
         .receiveBroadcastStream()
         .map((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .map((s) => BluetoothState.values[s.state.value]);
+  }
+  
+  _setLogLevelIfAvailable() async {
+    if (await isAvailable) {
+      // Send the log level to the underlying platforms.
+      setLogLevel(logLevel);
+    }
   }
 
   /// Starts a scan for Bluetooth Low Energy devices
