@@ -802,12 +802,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
                 }
                 
-                 /*
-            / Changes the MTU size to 512 in case LOLLIPOP and above devices
-            */
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                exchangeGattMtu(512, gatt);
-            }
+               
                 
                 servicesDiscoveredSink.success(p.build().toByteArray());
             }
