@@ -819,13 +819,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         }
         
         private void exchangeGattMtu(int mtu, BluetoothGatt gatt) {
-        int retry = 5;
-        boolean status = false;
-        while (!status && retry > 0) {
-            status = gatt.requestMtu(mtu);
-            retry--;
+            int retry = 5;
+            boolean status = false;
+            while (!status && retry > 0) {
+                status = gatt.requestMtu(mtu);
+                retry--;
+            }
         }
-    }
 
         @Override
         public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
