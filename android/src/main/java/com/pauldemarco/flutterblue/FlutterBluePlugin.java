@@ -8,6 +8,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothDevice.*;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
@@ -794,12 +795,26 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
             log(LogLevel.DEBUG, "[onConnectionStateChange] status: " + status + " newState: " + newState);
+			if(status==133) {
+				 log(LogLevel.DEBUG,"Status 133");
+				if (gatt != null)  {
+					gatt.close();		
+				}
+				return;
+			}
             channel.invokeMethod("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
 
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             log(LogLevel.DEBUG, "[onServicesDiscovered] count: " + gatt.getServices().size() + " status: " + status);
+			if(status==133) {
+				 log(LogLevel.DEBUG,"Status 133");
+				if (gatt != null)  {
+					gatt.close();		
+				}
+				return;
+			}
             if(servicesDiscoveredSink != null) {
                 Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
                 p.setRemoteId(gatt.getDevice().getAddress());
