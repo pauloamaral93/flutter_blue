@@ -202,13 +202,15 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("already_connected", "connection with device already exists", null);
                     return;
                 }
-
-                // If device was connected to previously but is now disconnected, attempt a reconnect
+		    
+	       // If device was connected to previously but is now disconnected, attempt a reconnect
                 if(mGattServers.containsKey(deviceId) && !isConnected) {
-                    if(!mGattServers.get(deviceId).connect()){
+                    if(mGattServers.get(deviceId).connect()){
+                        result.success(null);
+                    } else {
                         result.error("reconnect_error", "error when reconnecting to device", null);
-                        return;
                     }
+                    return;
                 }
 
                  // New request, connect and add gattServer to Map
