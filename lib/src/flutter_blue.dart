@@ -50,6 +50,15 @@ class FlutterBlue {
         .then((buffer) => new protos.BluetoothState.fromBuffer(buffer))
         .then((s) => BluetoothState.values[s.state.value]);
   }
+  
+  /// ECL: Remove GATT device 
+  Future<bool> clear()
+  {
+    return _channel
+          .invokeMethod('clear')
+          .then((buffer) => new protos.BluetoothState.fromBuffer(buffer))
+          .then((s) => true);
+   }
 
   /// Occurs when the bluetooth state has changed
   Stream<BluetoothState> onStateChanged() {
