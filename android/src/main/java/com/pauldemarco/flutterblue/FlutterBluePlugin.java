@@ -157,6 +157,20 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 result.success(mBluetoothAdapter.isEnabled());
                 break;
             }
+			
+	   case "clear":
+            {
+                mBluetoothAdapter.disable();
+                try {
+                    Thread.sleep(1000); // 500 is too short!
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                mBluetoothAdapter.enable();
+                
+                result.success(true);
+                break;
+            }
 
             case "startScan":
             {
@@ -204,14 +218,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 		    
 	       // If device was connected to previously but is now disconnected, attempt a reconnect
-                if(mGattServers.containsKey(deviceId) && !isConnected) {
-                    if(mGattServers.get(deviceId).connect()){
-                        result.success(null);
-                    } else {
-                        result.error("reconnect_error", "error when reconnecting to device", null);
-                    }
-                    return;
-                }
+//                 if(mGattServers.containsKey(deviceId) && !isConnected) {
+//                     if(mGattServers.get(deviceId).connect()){
+//                         result.success(null);
+//                     } else {
+//                         result.error("reconnect_error", "error when reconnecting to device", null);
+//                     }
+//                     return;
+//                 }
 
                  // New request, connect and add gattServer to Map
                 BluetoothGatt gattServer;
