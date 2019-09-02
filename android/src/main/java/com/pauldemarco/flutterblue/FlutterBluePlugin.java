@@ -245,6 +245,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 		    
                 BluetoothGatt gattServer = mGattServers.remove(deviceId);
                 if(gattServer != null) {
+		    gattServer.disconnect()
                     gattServer.close();
                 }
                 result.success(null);
