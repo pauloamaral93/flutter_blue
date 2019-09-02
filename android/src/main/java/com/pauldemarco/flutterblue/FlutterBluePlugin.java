@@ -816,6 +816,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 			if(status==133) {
 				 log(LogLevel.DEBUG,"Status 133");
 				if (gatt != null)  {
+					gatt.disconnect();
 					gatt.close();		
 				}
 				return;
