@@ -259,8 +259,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             case "deviceState":
             {
                 String deviceId = (String)call.arguments;
-                BluetoothDevice device = 
-			.getRemoteDevice(deviceId);
+              	BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(deviceId);
                 int state = mBluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
                 try {
                     result.success(ProtoMaker.from(device, state).toByteArray());
