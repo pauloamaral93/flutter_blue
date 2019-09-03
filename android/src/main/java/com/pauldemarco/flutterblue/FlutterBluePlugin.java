@@ -160,13 +160,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 			
 	   case "clear":
             {                
-                if (gattServer == null) 
-                {
-                    return;
-                }
+
 	    	mGattServers.clear();    
-                gattServer.close();
-                gattServer = null;
+
                 break;
             }
 
