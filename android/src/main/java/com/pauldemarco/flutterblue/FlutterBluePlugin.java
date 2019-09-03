@@ -159,16 +159,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             }
 			
 	   case "clear":
-            {
-                mBluetoothAdapter.disable();
-                try {
-                    Thread.sleep(1000); // 500 is too short!
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            {                
+                if (gattServer == null) 
+                {
+                    return;
                 }
-                mBluetoothAdapter.enable();
-                
-                result.success(true);
+	    	mGattServers.clear();    
+                gattServer.close();
+                gattServer = null;
                 break;
             }
 
