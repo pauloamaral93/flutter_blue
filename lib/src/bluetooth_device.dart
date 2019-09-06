@@ -11,13 +11,13 @@ class BluetoothDevice {
   final int rssi;
 
   BluetoothDevice(
-      {@required this.id, this.name, this.type = BluetoothDeviceType.unknown, this.rssi});
+      {@required this.id, this.name, this.type = BluetoothDeviceType.unknown});
 
   BluetoothDevice.fromProto(protos.BluetoothDevice p)
       : id = new DeviceIdentifier(p.remoteId),
         name = p.name,
-        type = BluetoothDeviceType.values[p.type.value],
-        rssi = p.rssi; 
+        type = BluetoothDeviceType.values[p.type.value];
+      
 
   /// Discovers services offered by the remote device as well as their characteristics and descriptors
   Future<List<BluetoothService>> discoverServices() async {
