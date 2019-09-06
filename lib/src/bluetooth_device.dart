@@ -8,7 +8,6 @@ class BluetoothDevice {
   final DeviceIdentifier id;
   final String name;
   final BluetoothDeviceType type;
-  final int rssi;
 
   BluetoothDevice(
       {@required this.id, this.name, this.type = BluetoothDeviceType.unknown});
