@@ -11,7 +11,7 @@ class BluetoothDevice {
   final int rssi;
 
   BluetoothDevice(
-      {@required this.id, this.name, this.type = BluetoothDeviceType.unknown});
+      {@required this.id, this.name, this.type = BluetoothDeviceType.unknown, this.rssi});
 
   BluetoothDevice.fromProto(protos.BluetoothDevice p)
       : id = new DeviceIdentifier(p.remoteId),
