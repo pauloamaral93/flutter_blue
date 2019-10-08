@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattServer;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
@@ -262,6 +263,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "discoverServices":
             {
+                String deviceId = (String)call.arguments;
                 try {
                     BluetoothGatt gatt = locateGatt(deviceId);
                     if(gatt.discoverServices()) {
@@ -306,6 +308,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("mtu", "no instance of BluetoothGatt, have you connected first?", null);
                 }
                 break;
+            }
 
             case "requestMtu": {
                  byte[] data = call.arguments();
@@ -967,7 +970,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     Protos.MtuSizeResponse.Builder p = Protos.MtuSizeResponse.newBuilder();
                     p.setRemoteId(gatt.getDevice().getAddress());
                     p.setMtu(mtu);
-                    invokeMethodUIThread("MtuSize", p.build().toByteArray());
+                    channel.invokeMethod("MtuSize", p.build().toByteArray());
                 }
             }
         }
