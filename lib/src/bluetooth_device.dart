@@ -263,6 +263,8 @@ class BluetoothDevice {
       new Future.error(new UnimplementedError());
 }
 
+enum ConnectionPriority { balanced, high, low_power }
+
 enum BluetoothDeviceType { unknown, classic, le, dual }
 
 enum BluetoothDeviceState { disconnected, connecting, connected, disconnecting }
