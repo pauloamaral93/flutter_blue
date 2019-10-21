@@ -50,6 +50,14 @@ class BluetoothDevice {
       "remoteId": id.toString(),
     });
   }
+  
+  Future requestConnectionPriority(ConnectionPriority priority) async {
+    var request = protos.RequestConnectionPriorityRequest.create()
+    ..remoteId = id.toString()
+    ..priority = priority.index
+    ..success = false;
+    await FlutterBlue.instance._channel.invokeMethod('RequestConnectionPriority', request.writeToBuffer());
+  }
 
   /// Retrieves the value of a specified characteristic
   Future<List<int>> readCharacteristic(
