@@ -838,29 +838,12 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             log(LogLevel.DEBUG, "[onServicesDiscovered] count: " + gatt.getServices().size() + " status: " + status);
-			if(status==133) {
-				 log(LogLevel.DEBUG,"Status 133");
-				if (gatt != null)  {
-					gatt.close();		
-				}
-				return;
-			}
-            if(servicesDiscoveredSink != null) {
-                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
-                p.setRemoteId(gatt.getDevice().getAddress());
-                for(BluetoothGattService s : gatt.getServices()) {
-                    p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
-                }
-                
-                /*
-                / Changes the MTU size to 512 in case LOLLIPOP and above devices
-                */
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                   //exchangeGattMtu(512, gatt);
-                }
-                
-                invokeMethodUIThread("DiscoverServicesResult", p.build().toByteArray());
+            Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
+            p.setRemoteId(gatt.getDevice().getAddress());
+            for(BluetoothGattService s : gatt.getServices()) {
+                p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
             }
+            invokeMethodUIThread("DiscoverServicesResult", p.build().toByteArray());
         }
         
         private void exchangeGattMtu(int mtu, BluetoothGatt gatt) {
