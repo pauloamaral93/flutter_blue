@@ -863,7 +863,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                    //exchangeGattMtu(512, gatt);
                 }
                 
-                servicesDiscoveredSink.success(p.build().toByteArray());
+                invokeMethodUIThread("DiscoverServicesResult", p.build().toByteArray());
             }
         }
         
