@@ -838,17 +838,19 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             log(LogLevel.DEBUG, "[onServicesDiscovered] count: " + gatt.getServices().size() + " status: " + status);
-            if(servicesDiscoveredSink != null) {
-                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
-                p.setRemoteId(gatt.getDevice().getAddress());
-                for(BluetoothGattService s : gatt.getServices()) {
-                    p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
-                }
+          
 		    
 		    registrar.activity().runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
+			    if(servicesDiscoveredSink != null) {
+                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
+                p.setRemoteId(gatt.getDevice().getAddress());
+                for(BluetoothGattService s : gatt.getServices()) {
+                    p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
+                }
+				    
                         servicesDiscoveredSink.success(p.build().toByteArray());
                     }
                 });
