@@ -278,21 +278,17 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             case "services":
             {
                 String deviceId = (String)call.arguments;
-                BluetoothGatt gattServer = mGattServers.get(deviceId);
-                if(gattServer == null) {
-                    result.error("get_services_error", "no instance of BluetoothGatt, have you connected first?", null);
-                    return;
+                try {
+                    BluetoothGatt gatt = mGattServers.get(deviceId);
+                    Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
+                    p.setRemoteId(deviceId);
+                    for(BluetoothGattService s : gatt.getServices()){
+                        p.addServices(ProtoMaker.from(gatt.getDevice(), s, gatt));
+                    }
+                    result.success(p.build().toByteArray());
+                } catch(Exception e) {
+                    result.error("get_services_error", e.getMessage(), e);
                 }
-                if(gattServer.getServices().isEmpty()) {
-                    result.error("get_services_error", "services are empty, have you called discoverServices() yet?", null);
-                    return;
-                }
-                Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
-                p.setRemoteId(deviceId);
-                for(BluetoothGattService s : gattServer.getServices()){
-                    p.addServices(ProtoMaker.from(gattServer.getDevice(), s, gattServer));
-                }
-                result.success(p.build().toByteArray());
                 break;
             }
 
@@ -883,7 +879,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 Protos.ReadCharacteristicResponse.Builder p = Protos.ReadCharacteristicResponse.newBuilder();
                 p.setRemoteId(gatt.getDevice().getAddress());
                 p.setCharacteristic(ProtoMaker.from(characteristic, gatt));
-                characteristicReadSink.success(p.build().toByteArray());
+                invokeMethodUIThread("ReadCharacteristicResponse", p.build().toByteArray());
             }
         }
 
