@@ -310,7 +310,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     gattServer = mGattServers.get(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			 
-			    bool re = gattServer.requestMtu(size);
+			    boolean re = gattServer.requestMtu(size);
 			    Log.i(TAG, "New MTU status is " + re);
                         if(re) {
                             result.success(true);
