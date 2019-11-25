@@ -293,17 +293,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             }
 
             case "requestMtu": {
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                    result.error(
-                            "RuntimeException",
-                            "This method is only available on API level "
-                                    + Build.VERSION_CODES.LOLLIPOP
-                                    + " or higher",
-                            null
-                    );
-                    return;
-                }
-
+           
                 Integer size = call.argument("size");
                 String remoteId = call.argument("remoteId");
                 if (size == null) {
@@ -317,13 +307,19 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 BluetoothGatt gattServer;
                 try {
-                    gattServer = locateGatt(remoteId);
-                } catch (Exception e) {
-                    result.error("read_characteristic_error", e.getMessage(), null);
-                    return;
+                    gattServer = locateGatt(request.getRemoteId());
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        if(gattServer.requestMtu(size)) {
+                            result.success(null);
+                        } else {
+                            result.error("requestMtu", "gatt.requestMtu returned false", null);
+                        }
+                    } else {
+                        result.error("requestMtu", "Only supported on devices >= API 21 (Lollipop). This device == " + Build.VERSION.SDK_INT, null);
+                    }
+                } catch(Exception e) {
+                    result.error("requestMtu", e.getMessage(), e);
                 }
-
-                result.success(gattServer.requestMtu(size));
                 break;
             }
 			
@@ -968,6 +964,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
+	    super.onMtuChanged(gatt, mtu, status);	
         }
     };
 	
