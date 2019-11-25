@@ -307,7 +307,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 BluetoothGatt gattServer;
                 try {
-                    gattServer = locateGatt(request.getRemoteId());
+                    gattServer = locateGatt(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         if(gattServer.requestMtu(size)) {
                             result.success(null);
