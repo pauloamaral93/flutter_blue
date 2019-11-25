@@ -309,12 +309,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 try {
                     gattServer = locateGatt(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			     gattServer.requestMtu(512);
-//                         if(gattServer.requestMtu(size)) {
-//                             result.success(null);
-//                         } else {
-//                             result.error("requestMtu", "gatt.requestMtu returned false", null);
-//                         }
+			 
+			    int re = gattServer.requestMtu(size);
+			    Log.i(TAG, "New MTU status is " + re);
+                        if(re != null) {
+                            result.success(true);
+                        } else {
+                            result.error("requestMtu", "gatt.requestMtu returned false", null);
+                        }
                     } else {
                         result.error("requestMtu", "Only supported on devices >= API 21 (Lollipop). This device == " + Build.VERSION.SDK_INT, null);
                     }
