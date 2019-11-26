@@ -966,6 +966,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
         @Override
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
+		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 	    	
         }
