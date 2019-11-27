@@ -428,16 +428,18 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     return;
                 }
 
-                // Set characteristic to new value
-                if(!characteristic.setValue(request.getValue().toByteArray())){
-                    result.error("write_characteristic_error", "could not set the local value of characteristic", null);
-                }
+               
 
                 // Apply the correct write type
                 if(request.getWriteType() == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
                     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
                 } else {
                     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                }
+		    
+	        // Set characteristic to new value
+                if(!characteristic.setValue(request.getValue().toByteArray())){
+                    result.error("write_characteristic_error", "could not set the local value of characteristic", null);
                 }
 
                 if(!gattServer.writeCharacteristic(characteristic)){
