@@ -437,25 +437,15 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 }
 		    
+		    log(LogLevel.DEBUG,request.getValue().toByteArray());
 	        // Set characteristic to new value
                 if(!characteristic.setValue(request.getValue().toByteArray())){
                     result.error("write_characteristic_error", "could not set the local value of characteristic", null);
                 }
-
-		   final BluetoothGatt gatt2 = gattServer;
-		   final BluetoothGattCharacteristic car = characteristic;
-		 
-		 registrar.activity().runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        
-			   gatt2.writeCharacteristic(car);
-                   		return;
+		 if(!gattServer.writeCharacteristic(characteristic)){
+                    result.error("write_characteristic_error", "writeCharacteristic failed", null);
+                    return;
                 }
-			    
-                    
-                });
 		 
                 
 
@@ -900,6 +890,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
         @Override
         public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
             log(LogLevel.DEBUG, "[onCharacteristicWrite] uuid: " + characteristic.getUuid().toString() + " status: " + status);
+		
             Protos.WriteCharacteristicRequest.Builder request = Protos.WriteCharacteristicRequest.newBuilder();
             request.setRemoteId(gatt.getDevice().getAddress());
             request.setCharacteristicUuid(characteristic.getUuid().toString());
