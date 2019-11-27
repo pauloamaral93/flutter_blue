@@ -442,10 +442,21 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("write_characteristic_error", "could not set the local value of characteristic", null);
                 }
 
-                if(!gattServer.writeCharacteristic(characteristic)){
+		 
+		 registrar.activity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        
+			   if(!gattServer.writeCharacteristic(characteristic)){
                     result.error("write_characteristic_error", "writeCharacteristic failed", null);
                     return;
                 }
+			    
+                    }
+                });
+		 
+                
 
                 result.success(null);
                 break;
@@ -824,9 +835,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-		if (newState == BluetoothProfile.STATE_CONNECTED) {
-        gatt.requestMtu(512);
-      }
+
+		
+		
       super.onConnectionStateChange(gatt, status, newState);
             log(LogLevel.DEBUG, "[onConnectionStateChange] status: " + status + " newState: " + newState);
 		if(status==133) {
