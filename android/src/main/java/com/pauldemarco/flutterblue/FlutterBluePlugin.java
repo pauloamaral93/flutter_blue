@@ -443,13 +443,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 
 		   final BluetoothGatt gatt2 = gattServer;
+		   final BluetoothGattCharacteristic car = characteristic;
 		 
 		 registrar.activity().runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
                         
-			   gatt2.writeCharacteristic(characteristic);
+			   gatt2.writeCharacteristic(car);
                    		return;
                 }
 			    
