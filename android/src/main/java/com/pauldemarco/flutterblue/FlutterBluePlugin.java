@@ -453,7 +453,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                    		return;
                 }
 			    
-                    }
+                    
                 });
 		 
                 
