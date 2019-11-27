@@ -173,9 +173,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     ActivityCompat.requestPermissions(
                             registrar.activity(),
                             new String[] {
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                    Manifest.permission.ACCESS_FINE_LOCATION
                             },
-                            REQUEST_COARSE_LOCATION_PERMISSIONS);
+                            REQUEST_FINE_LOCATION_PERMISSIONS);
                     pendingCall = call;
                     pendingResult = result;
                     break;
@@ -564,7 +564,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     @Override
     public boolean onRequestPermissionsResult(
             int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == REQUEST_COARSE_LOCATION_PERMISSIONS) {
+        if (requestCode == REQUEST_FINE_LOCATION_PERMISSIONS) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScan(pendingCall, pendingResult);
             } else {
