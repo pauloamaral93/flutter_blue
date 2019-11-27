@@ -824,15 +824,19 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private final BluetoothGattCallback mGattCallback = new BluetoothGattCallback() {
         @Override
         public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+		if (newState == Bluetooth.STATE_CONNECTED) {
+        gatt.requestMtu(512);
+      }
+      super.onConnectionStateChange(gatt, status, newState);
             log(LogLevel.DEBUG, "[onConnectionStateChange] status: " + status + " newState: " + newState);
-			if(status==133) {
-				 log(LogLevel.DEBUG,"Status 133");
-				if (gatt != null)  {
-					gatt.disconnect();
-					gatt.close();		
-				}
-				return;
+		if(status==133) {
+			 log(LogLevel.DEBUG,"Status 133");
+			if (gatt != null)  {
+				gatt.disconnect();
+				gatt.close();		
 			}
+			return;
+		}
            invokeMethodUIThread("DeviceState", ProtoMaker.from(gatt.getDevice(), newState).toByteArray());
         }
 
