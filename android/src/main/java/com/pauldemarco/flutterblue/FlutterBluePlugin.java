@@ -437,7 +437,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
                 }
 		    
-		    log(LogLevel.DEBUG,request.getValue().toByteArray());
+		    log(LogLevel.DEBUG,Arrays.toString(request.getValue().toByteArray()));
 	        // Set characteristic to new value
                 if(!characteristic.setValue(request.getValue().toByteArray())){
                     result.error("write_characteristic_error", "could not set the local value of characteristic", null);
