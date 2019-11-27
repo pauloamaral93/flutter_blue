@@ -438,7 +438,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 }
 		    
 		    for(byte c : request.getValue().toByteArray()) {
-			    System.out.format("%d ", c);
+			    log("%d ", c);
 			}
 	        // Set characteristic to new value
                 if(!characteristic.setValue(request.getValue().toByteArray())){
