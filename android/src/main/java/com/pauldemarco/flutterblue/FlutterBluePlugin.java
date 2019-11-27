@@ -228,7 +228,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 } else {
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
                 }
-		    device.createBond(BluetoothDevice.TRANSPORT_LE);
+		    device.createBond();
                 mGattServers.put(deviceId, gattServer);
                 result.success(null);
                 break;
