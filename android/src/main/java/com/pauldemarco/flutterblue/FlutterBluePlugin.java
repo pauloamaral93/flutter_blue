@@ -442,15 +442,15 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("write_characteristic_error", "could not set the local value of characteristic", null);
                 }
 
+		   final BluetoothGatt gatt2 = gattServer;
 		 
 		 registrar.activity().runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
                         
-			   if(!gattServer.writeCharacteristic(characteristic)){
-                    result.error("write_characteristic_error", "writeCharacteristic failed", null);
-                    return;
+			   gatt2.writeCharacteristic(characteristic);
+                   		return;
                 }
 			    
                     }
