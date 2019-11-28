@@ -231,10 +231,24 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 BluetoothGatt gattServer;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			
-			 TimeUnit.SECONDS.sleep(1);
+			 try 
+{
+    Thread.sleep(500);
+} 
+catch(InterruptedException e)
+{
+     // this part is executed when an exception (in this example InterruptedException) occurs
+}
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
                 } else {
-			 TimeUnit.SECONDS.sleep(1);
+			 			 try 
+{
+    Thread.sleep(500);
+} 
+catch(InterruptedException e)
+{
+     // this part is executed when an exception (in this example InterruptedException) occurs
+}
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
                 }
 		    
@@ -869,7 +883,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 new Runnable() {
                     @Override
                     public void run() {
-                         TimeUnit.SECONDS.sleep(1);
+                         			 try 
+{
+    Thread.sleep(500);
+} 
+catch(InterruptedException e)
+{
+     // this part is executed when an exception (in this example InterruptedException) occurs
+}
 			    if(servicesDiscoveredSink != null) {
 				final Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
 				p.setRemoteId(gatt2.getDevice().getAddress());
