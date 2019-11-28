@@ -557,7 +557,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 		new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
-              gattServer2.writeDescriptor(cccDescriptor2));
+              gattServer2.writeDescriptor(cccDescriptor2);
 
 			     }
                         }, 500);
