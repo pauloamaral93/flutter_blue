@@ -31,6 +31,7 @@ import android.os.ParcelUuid;
 import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
+jimport java.util.concurrent.TimeUnit
 
 
 
@@ -229,10 +230,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                  // New request, connect and add gattServer to Map
                 BluetoothGatt gattServer;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-			Thread.sleep(500);
+			
+			 TimeUnit.SECONDS.sleep(1);
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
                 } else {
-			Thread.sleep(500);
+			 TimeUnit.SECONDS.sleep(1);
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
                 }
 		    
@@ -867,7 +869,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 new Runnable() {
                     @Override
                     public void run() {
-                        Thread.sleep(500);
+                         TimeUnit.SECONDS.sleep(1);
 			    if(servicesDiscoveredSink != null) {
 				final Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
 				p.setRemoteId(gatt2.getDevice().getAddress());
