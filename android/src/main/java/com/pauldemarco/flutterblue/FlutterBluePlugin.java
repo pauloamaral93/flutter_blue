@@ -232,14 +232,14 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			
 			 try 
-{
-    Thread.sleep(500);
-} 
-catch(InterruptedException e)
-{
-     // this part is executed when an exception (in this example InterruptedException) occurs
-}
-                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
+			{
+			    Thread.sleep(500);
+			} 
+			catch(InterruptedException e)
+			{
+			     // this part is executed when an exception (in this example InterruptedException) occurs
+			}
+                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, BluetoothDevice.TRANSPORT_AUTO, BluetoothDevice.PHY_LE_CODED);
                 } else {
 			 			 try 
 {
