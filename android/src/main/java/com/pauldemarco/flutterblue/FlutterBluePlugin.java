@@ -550,14 +550,15 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                     result.error("set_notification_error", "error when setting the descriptor value to: " + value, null);
                     return;
                 }
+		    
+		    final BluetoothGatt gattServer2 = gattServer;
+                   final  BluetoothGattDescriptor cccDescriptor2 =  cccDescriptor;
 
 		new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                if(!gattServer.writeDescriptor(cccDescriptor)) {
-                    result.error("set_notification_error", "error when writing the descriptor", null);
-                    return;
-                }
+              gattServer2.writeDescriptor(cccDescriptor2));
+
 			     }
                         }, 500);
 
