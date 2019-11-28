@@ -197,6 +197,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
             case "connect":
             {
+		  
                 byte[] data = call.arguments();
                 Protos.ConnectRequest options;
                 try {
@@ -228,9 +229,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                  // New request, connect and add gattServer to Map
                 BluetoothGatt gattServer;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			Thread.sleep(500);
                     gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
                 } else {
-                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
+			Thread.sleep(500);
+                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
                 }
 		    
                 mGattServers.put(deviceId, gattServer);
@@ -864,7 +867,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 new Runnable() {
                     @Override
                     public void run() {
-                        
+                        Thread.sleep(500);
 			    if(servicesDiscoveredSink != null) {
 				final Protos.DiscoverServicesResult.Builder p = Protos.DiscoverServicesResult.newBuilder();
 				p.setRemoteId(gatt2.getDevice().getAddress());
