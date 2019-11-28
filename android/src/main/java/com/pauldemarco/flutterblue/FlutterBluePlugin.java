@@ -433,9 +433,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 // Apply the correct write type
                 if(request.getWriteType() == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
-                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+                   // characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+			characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
                 } else {
-                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+                 //   characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+			characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
                 }
 		    
 	        // Set characteristic to new value
