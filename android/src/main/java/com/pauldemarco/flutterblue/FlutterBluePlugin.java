@@ -224,9 +224,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                  // New request, connect and add gattServer to Map
                 BluetoothGatt gattServer;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, BluetoothDevice.DEVICE_TYPE_LE);
+                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
                 } else {
-                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback);
+                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, 2);
                 }
 		    
                 mGattServers.put(deviceId, gattServer);
@@ -433,11 +433,11 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 // Apply the correct write type
                 if(request.getWriteType() == Protos.WriteCharacteristicRequest.WriteType.WITHOUT_RESPONSE) {
-                   // characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
-			characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
+                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE);
+			//characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
                 } else {
-                 //   characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
-			characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
+                    characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT);
+			//characteristic.setWriteType(BluetoothGattCharacteristic.WRITE_TYPE_SIGNED);
                 }
 		    
 	        // Set characteristic to new value
