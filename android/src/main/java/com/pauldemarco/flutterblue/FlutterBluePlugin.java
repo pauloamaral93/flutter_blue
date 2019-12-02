@@ -657,6 +657,10 @@ catch(InterruptedException e)
             @Override
             public void onReceive(Context context, Intent intent) {
                 final String action = intent.getAction();
+		    
+		    if(mBluetoothAdapter == null) {
+			    return;
+		    }
 
                 if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                     final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
