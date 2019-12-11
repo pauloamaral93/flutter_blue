@@ -1035,24 +1035,6 @@ catch(InterruptedException e)
                 });
     }
 	
-  public void sendData(byte [] data){
-    int chunksize = 20; //20 byte chunk
-    packetSize = (int) Math.ceil( data.length / (double)chunksize); //make this variable public so we can access it on the other function
-
-    //this is use as header, so peripheral device know ho much packet will be received.
-    characteristicData.setValue(packetSize.toString().getBytes());
-    mGatt.writeCharacteristic(characteristicData);
-    mGatt.executeReliableWrite();
-
-    packets = new byte[packetSize][chunksize];
-    packetInteration =0;
-    Integer start = 0;
-    for(int i = 0; i < packets.length; i++) {
-        int end = start+chunksize;
-        if(end>data.length){end = data.length;}
-        packets[i] = Arrays.copyOfRange(data,start, end);
-        start += chunksize;
-    }
 
     enum LogLevel
     {
