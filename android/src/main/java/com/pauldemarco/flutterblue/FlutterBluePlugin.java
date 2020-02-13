@@ -122,6 +122,29 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 result.success(null);
                 break;
             }
+			
+	case "getDeviceBondState": {
+                if (!call.hasArgument("remoteId")) {
+                    result.error("invalid_argument", "argument 'address' not found", null);
+                    break;
+                }
+
+                String address;
+                try {
+                    address = call.argument("remoteId");
+                    if (!BluetoothAdapter.checkBluetoothAddress(address)) {
+                        throw new ClassCastException();
+                    }
+                }
+                catch (ClassCastException ex) {
+                    result.error("invalid_argument", "'address' argument is required to be string containing remote MAC address", null);
+                    break;
+                }
+
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                result.success(device.getBondState());
+                break;
+            }
 
             case "state":
             {
