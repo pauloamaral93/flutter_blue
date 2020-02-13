@@ -115,7 +115,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             return;
         }
 
-        methodCallDispatching: switch (call.method) {
+        switch (call.method) {
             case "setLogLevel":
             {
                 int logLevelIndex = (int)call.arguments;
@@ -156,7 +156,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 String address;
                 try {
                     address = call.argument("remoteId");
-                    if (!BluetoothAdapter.checkBluetoothAddress(address)) {
+                    if (!mBluetoothAdapter.checkBluetoothAddress(address)) {
                         throw new ClassCastException();
                     }
                 }
@@ -174,10 +174,10 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                 switch (device.getBondState()) {
                     case BluetoothDevice.BOND_BONDING:
                         result.error("bond_error", "device already bonding", null);
-                        break methodCallDispatching;
+                        break;
                     case BluetoothDevice.BOND_BONDED:
                         result.error("bond_error", "device already bonded", null);
-                        break methodCallDispatching;
+                        break;
                     default: 
                         // Proceed.
                         break;
