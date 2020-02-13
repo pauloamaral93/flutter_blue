@@ -51,12 +51,19 @@ class BluetoothDevice {
     });
   }
   
-  Future<int> getBondState(int size) async {
+  Future<int> bondDevice() async {
     return await FlutterBlue.instance._channel.invokeMethod("getDeviceBondState", {
-      "size": size,
       "remoteId": id.toString(),
     });
   }
+  
+  Future<int> getBondState() async {
+    return await FlutterBlue.instance._channel.invokeMethod("bondDevice", {
+      "remoteId": id.toString(),
+    });
+  }
+  
+  
   
   Future requestConnectionPriority(ConnectionPriority priority) async {
     var request = protos.RequestConnectionPriorityRequest.create()
