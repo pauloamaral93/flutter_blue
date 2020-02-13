@@ -51,6 +51,13 @@ class BluetoothDevice {
     });
   }
   
+  Future<bool> getBondState(int size) async {
+    return await FlutterBle.instance._channel.invokeMethod("getBondState", {
+      "size": size,
+      "remoteId": id.toString(),
+    });
+  }
+  
   Future requestConnectionPriority(ConnectionPriority priority) async {
     var request = protos.RequestConnectionPriorityRequest.create()
     ..remoteId = id.toString()
