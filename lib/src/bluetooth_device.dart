@@ -51,7 +51,7 @@ class BluetoothDevice {
     });
   }
   
-  Future<bool> getBondState(int size) async {
+  Future<int> getBondState(int size) async {
     return await FlutterBlue.instance._channel.invokeMethod("getDeviceBondState", {
       "size": size,
       "remoteId": id.toString(),
