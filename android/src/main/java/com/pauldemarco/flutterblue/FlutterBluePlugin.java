@@ -80,6 +80,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
     private Result pendingResult;
+    private BroadcastReceiver bondStateBroadcastReceiver = null;
 
     /**
      * Plugin registration.
@@ -143,6 +144,89 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
                 result.success(device.getBondState());
+                break;
+            }
+			
+	   case "bondDevice": {
+                if (!call.hasArgument("remoteId")) {
+                    result.error("invalid_argument", "argument 'address' not found", null);
+                    break;
+                }
+
+                String address;
+                try {
+                    address = call.argument("remoteId");
+                    if (!BluetoothAdapter.checkBluetoothAddress(address)) {
+                        throw new ClassCastException();
+                    }
+                }
+                catch (ClassCastException ex) {
+                    result.error("invalid_argument", "'address' argument is required to be string containing remote MAC address", null);
+                    break;
+                }
+
+                if (bondStateBroadcastReceiver != null) {
+                    result.error("bond_error", "another bonding process is ongoing from local device", null);
+                    break;
+                }
+
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                switch (device.getBondState()) {
+                    case BluetoothDevice.BOND_BONDING:
+                        result.error("bond_error", "device already bonding", null);
+                        break methodCallDispatching;
+                    case BluetoothDevice.BOND_BONDED:
+                        result.error("bond_error", "device already bonded", null);
+                        break methodCallDispatching;
+                    default: 
+                        // Proceed.
+                        break;
+                }
+
+                bondStateBroadcastReceiver = new BroadcastReceiver() {
+                    @Override 
+                    public void onReceive(Context context, Intent intent) {
+                        switch (intent.getAction()) {
+                            // @TODO . BluetoothDevice.ACTION_PAIRING_CANCEL
+                            case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
+                                final BluetoothDevice someDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                                if (!someDevice.equals(device)) {
+                                    break;
+                                }
+
+                                final int newBondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE, BluetoothDevice.ERROR);
+                                switch (newBondState) {
+                                    case BluetoothDevice.BOND_BONDING:
+                                        // Wait for true bond result :F
+                                        return;
+                                    case BluetoothDevice.BOND_BONDED:
+                                        result.success(true);
+                                        break;
+                                    case BluetoothDevice.BOND_NONE:
+                                        result.success(false);
+                                        break;
+                                    default:
+                                        result.error("bond_error", "invalid bond state while bonding", null);
+                                        break;
+                                }
+                                registrar.activity().unregisterReceiver(this);
+                                bondStateBroadcastReceiver = null;
+                                break;
+
+                            default:
+                                // Ignore.
+                                break;
+                        }
+                    }
+                };
+
+                final IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+                //filter.setPriority(pairingRequestReceiverPriority + 1);
+                registrar.activity().registerReceiver(bondStateBroadcastReceiver, filter);
+
+                if (!device.createBond()) {
+                    result.error("bond_error", "error starting bonding process", null);
+                }
                 break;
             }
 
