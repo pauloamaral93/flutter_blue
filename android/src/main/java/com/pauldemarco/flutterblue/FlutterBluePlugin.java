@@ -115,7 +115,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
             return;
         }
 
-        switch (call.method) {
+        methodCallDispatching: switch (call.method) {
             case "setLogLevel":
             {
                 int logLevelIndex = (int)call.arguments;
