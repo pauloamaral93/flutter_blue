@@ -52,7 +52,7 @@ class BluetoothDevice {
   }
   
   Future<bool> getBondState(int size) async {
-    return await FlutterBle.instance._channel.invokeMethod("getDeviceBondState", {
+    return await FlutterBlue.instance._channel.invokeMethod("getDeviceBondState", {
       "size": size,
       "remoteId": id.toString(),
     });
