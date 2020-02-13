@@ -183,6 +183,9 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                         break;
                 }
 
+                final Result result2 = result;
+                final BluetoothDevice device2 = device;
+
                 bondStateBroadcastReceiver = new BroadcastReceiver() {
                     @Override 
                     public void onReceive(Context context, Intent intent) {
@@ -190,7 +193,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                             // @TODO . BluetoothDevice.ACTION_PAIRING_CANCEL
                             case BluetoothDevice.ACTION_BOND_STATE_CHANGED:
                                 final BluetoothDevice someDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                                if (!someDevice.equals(device)) {
+                                if (!someDevice.equals(device2)) {
                                     break;
                                 }
 
@@ -200,13 +203,13 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
                                         // Wait for true bond result :F
                                         return;
                                     case BluetoothDevice.BOND_BONDED:
-                                        result.success(true);
+                                        result2.success(true);
                                         break;
                                     case BluetoothDevice.BOND_NONE:
-                                        result.success(false);
+                                        result2.success(false);
                                         break;
                                     default:
-                                        result.error("bond_error", "invalid bond state while bonding", null);
+                                        result2.error("bond_error", "invalid bond state while bonding", null);
                                         break;
                                 }
                                 registrar.activity().unregisterReceiver(this);
