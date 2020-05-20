@@ -1136,9 +1136,21 @@ catch(InterruptedException e)
 		
 
         if (status == BluetoothGatt.GATT_SUCCESS) {
-            requestMtuCallback.success(mtu);
+		    registrar.activity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                         			 try 
+{
+   requestMtuCallback.success(mtu);
+} 
+catch(InterruptedException e)
+{
+     // this part is executed when an exception (in this example InterruptedException) occurs
+}
+            
         } else {
-            requestMtuCallback.error("requestMtu", "gatt.requestMtu failed", null);
+            requestMtuCallback.error("error", "gatt.requestMtu failed", null);
         }
         requestMtuCallback = null;
 		
