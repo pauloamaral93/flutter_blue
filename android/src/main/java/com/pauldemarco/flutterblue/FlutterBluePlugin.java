@@ -76,6 +76,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
+	private Result requestMtuCallback;
 
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
@@ -376,6 +377,7 @@ catch(InterruptedException e)
                 if(gattServer != null) {
 		    gattServer.disconnect();
                     gattServer.close();
+            	    gattServer = null;
                 }
                 result.success(null);
                 break;
@@ -448,7 +450,8 @@ catch(InterruptedException e)
 			    boolean re = gattServer.requestMtu(size);
 			    Log.i(TAG, "New MTU status is " + re);
                         if(re) {
-                            result.success(true);
+				requestMtuCallback = result;
+                            //result.success(true);
                         } else {
                             result.error("requestMtu", "gatt.requestMtu returned false", null);
                         }
@@ -1130,7 +1133,31 @@ catch(InterruptedException e)
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
 		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
-	    	
+		
+		
+
+        if (status == BluetoothGatt.GATT_SUCCESS) {
+		    registrar.activity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                         			 try 
+{
+   requestMtuCallback.success(mtu);
+} 
+catch(InterruptedException e)
+{
+     // this part is executed when an exception (in this example InterruptedException) occurs
+}}});
+			    
+            
+        } else {
+            requestMtuCallback.error("error", "gatt.requestMtu failed", null);
+        }
+        requestMtuCallback = null;
+		
+		
+	    //...	
         }
     };
 	
