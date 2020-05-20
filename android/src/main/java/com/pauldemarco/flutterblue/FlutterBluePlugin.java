@@ -76,7 +76,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
-	private CallbackContext requestMtuCallback;
+	private Result requestMtuCallback;
 
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
