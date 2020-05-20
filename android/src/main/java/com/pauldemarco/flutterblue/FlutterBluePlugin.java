@@ -76,6 +76,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private BluetoothAdapter mBluetoothAdapter;
     private final Map<String, BluetoothGatt> mGattServers = new HashMap<>();
     private LogLevel logLevel = LogLevel.EMERGENCY;
+	private CallbackContext requestMtuCallback;
 
     // Pending call and result for startScan, in the case where permissions are needed
     private MethodCall pendingCall;
@@ -448,7 +449,8 @@ catch(InterruptedException e)
 			    boolean re = gattServer.requestMtu(size);
 			    Log.i(TAG, "New MTU status is " + re);
                         if(re) {
-                            result.success(true);
+				requestMtuCallback = result;
+                            //result.success(true);
                         } else {
                             result.error("requestMtu", "gatt.requestMtu returned false", null);
                         }
@@ -1130,7 +1132,18 @@ catch(InterruptedException e)
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
 		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
-	    	
+		
+		LOG.d(TAG, "mtu=%d, status=%d", mtu, status);
+
+        if (status == BluetoothGatt.GATT_SUCCESS) {
+            requestMtuCallback.success(mtu);
+        } else {
+            requestMtuCallback.error("MTU request failed");
+        }
+        requestMtuCallback = null;
+		
+		
+	    //...	
         }
     };
 	
