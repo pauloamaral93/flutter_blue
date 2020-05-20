@@ -1133,7 +1133,7 @@ catch(InterruptedException e)
 		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 		
-		LOG.d(TAG, "mtu=%d, status=%d", mtu, status);
+		
 
         if (status == BluetoothGatt.GATT_SUCCESS) {
             requestMtuCallback.success(mtu);
