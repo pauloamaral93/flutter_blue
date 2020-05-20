@@ -1138,7 +1138,7 @@ catch(InterruptedException e)
         if (status == BluetoothGatt.GATT_SUCCESS) {
             requestMtuCallback.success(mtu);
         } else {
-            requestMtuCallback.error("MTU request failed");
+            requestMtuCallback.error("requestMtu", "gatt.requestMtu failed", null);
         }
         requestMtuCallback = null;
 		
