@@ -445,7 +445,10 @@ catch(InterruptedException e)
                 try {
                     gattServer = mGattServers.get(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			 
+			 registrar.activity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
 			    boolean re = gattServer.requestMtu(size);
 			    Log.i(TAG, "New MTU status is " + re);
                         if(re) {
@@ -454,6 +457,7 @@ catch(InterruptedException e)
                         } else {
                             result.error("requestMtu", "gatt.requestMtu returned false", null);
                         }
+		    }});
                     } else {
                         result.error("requestMtu", "Only supported on devices >= API 21 (Lollipop). This device == " + Build.VERSION.SDK_INT, null);
                     }
