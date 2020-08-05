@@ -350,7 +350,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
 			     // this part is executed when an exception (in this example InterruptedException) occurs
 			}
 			//gattServer = device.connectGatt(registrar.activity(), false, mGattCallback);
-                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, BluetoothDevice.TRANSPORT_LE);
+                    gattServer = device.connectGatt(registrar.activity(), options.getAndroidAutoConnect(), mGattCallback, BluetoothDevice.TRANSPORT_AUTO , BluetoothDevice.PHY_LE_CODED);
                 } else {
 			 			 try 
 {
