@@ -427,6 +427,21 @@ catch(InterruptedException e)
                 }
                 break;
             }
+			
+	    case "mtu":
+            {
+                String deviceId = (String)call.arguments;
+                BluetoothDeviceCache cache = mDevices.get(deviceId);
+                if(cache != null) {
+                    Protos.MtuSizeResponse.Builder p = Protos.MtuSizeResponse.newBuilder();
+                    p.setRemoteId(deviceId);
+                    p.setMtu(cache.mtu);
+                    result.success(p.build().toByteArray());
+                } else {
+                    result.error("mtu", "no instance of BluetoothGatt, have you connected first?", null);
+                }
+                break;
+            }
 
             case "requestMtu": {
            
