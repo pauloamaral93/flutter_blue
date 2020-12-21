@@ -481,15 +481,10 @@ catch(InterruptedException e)
                 try {
                     gattServer = mGattServers.get(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			    
-		       if (gattServer.requestMtu(size)) {
-			    
-			} else {
-			    result.error("Could not initiate MTU request");
-        		}
 			 
+			   gattServer.requestMtu(size);
 			   
-                        
+                       
                     } else {
                         result.error("requestMtu", "Only supported on devices >= API 21 (Lollipop). This device == " + Build.VERSION.SDK_INT, null);
                     }
@@ -1170,10 +1165,11 @@ catch(InterruptedException e)
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 		
 	if (status == BluetoothGatt.GATT_SUCCESS) {
-			    result.success(mtu);
-			} else {
-			    result.error("MTU change failed");
-			}
+                            result.success(true);
+                        } else {
+                            result.error("requestMtu", "gatt.requestMtu returned false", null);
+                        }
+			
 			
 	    	
         }
