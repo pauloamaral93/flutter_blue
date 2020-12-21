@@ -43,13 +43,30 @@ class BluetoothDevice {
             new protos.DiscoverServicesResult.fromBuffer(buffer).services)
         .then((i) => i.map((s) => new BluetoothService.fromProto(s)).toList());
   }
+  
+  Future<void> requestMtu(int desiredMtu) async {
+    var request = protos.MtuSizeRequest.create()
+      ..remoteId = id.toString()
+      ..mtu = desiredMtu;
 
-  Future<bool> requestMtu(int size) async {
-    return await FlutterBlue.instance._channel.invokeMethod("requestMtu", {
-      "size": size,
-      "remoteId": id.toString(),
-    });
+    await FlutterBlue.instance._channel.invokeMethod('requestMtu', 
+      request.writeToBuffer());
+
+    await FlutterBlue.instance._methodStream
+      .where((m) => m.method == "MtuSize")
+      .map((m) => m.arguments)
+      .map((buffer) => protos.MtuSizeResponse.fromBuffer(buffer))
+      .where((p) => p.remoteId == id.toString())
+      .map((p) => p.mtu)
+      .first;
   }
+
+//   Future<bool> requestMtu(int size) async {
+//     return await FlutterBlue.instance._channel.invokeMethod("requestMtu", {
+//       "size": size,
+//       "remoteId": id.toString(),
+//     });
+//   }
   
   Future<bool> bondDevice() async {
     return await FlutterBlue.instance._channel.invokeMethod("bondDevice", {
