@@ -51,6 +51,13 @@ class BluetoothDevice {
     });
   }
   
+  Future<bool> getMtu(int size) async {
+    return await FlutterBlue.instance._channel.invokeMethod("mtu", {
+      "size": size,
+      "remoteId": id.toString(),
+    });
+  }
+  
   Future<bool> bondDevice() async {
     return await FlutterBlue.instance._channel.invokeMethod("bondDevice", {
       "remoteId": id.toString(),
