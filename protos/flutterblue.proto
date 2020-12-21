@@ -205,3 +205,13 @@ message RequestConnectionPriorityRequest {
 message ConnectedDevicesResponse {
   repeated BluetoothDevice devices = 1;
 }
+
+message MtuSizeRequest {
+  string remote_id = 1;
+  uint32 mtu = 2;
+}
+
+message MtuSizeResponse {
+  string remote_id = 1;
+  uint32 mtu = 2;
+}
