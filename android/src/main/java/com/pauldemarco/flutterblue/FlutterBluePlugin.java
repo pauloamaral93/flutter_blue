@@ -81,6 +81,7 @@ public class FlutterBluePlugin implements MethodCallHandler, RequestPermissionsR
     private MethodCall pendingCall;
     private Result pendingResult;
     private BroadcastReceiver bondStateBroadcastReceiver = null;
+	Result resultMTU;
 
     /**
      * Plugin registration.
@@ -481,8 +482,9 @@ catch(InterruptedException e)
                 try {
                     gattServer = mGattServers.get(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-			 
+			  resultMTU = result;
 			   gattServer.requestMtu(size);
+			    
 			   
                        
                     } else {
@@ -1165,9 +1167,9 @@ catch(InterruptedException e)
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 		
 	if (status == BluetoothGatt.GATT_SUCCESS) {
-                            result.success(true);
+                            resultMTU.success(true);
                         } else {
-                            result.error("requestMtu", "gatt.requestMtu returned false", null);
+                            resultMTU.error("requestMtu", "gatt.requestMtu returned false", null);
                         }
 			
 			
