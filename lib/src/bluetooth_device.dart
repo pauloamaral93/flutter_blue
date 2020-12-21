@@ -44,6 +44,21 @@ class BluetoothDevice {
         .then((i) => i.map((s) => new BluetoothService.fromProto(s)).toList());
   }
   
+  /// The MTU size in bytes
+  Stream<int> get mtu async* {
+    yield await FlutterBlue.instance._channel
+        .invokeMethod('mtu', id.toString())
+        .then((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
+        .then((p) => p.mtu);
+
+    yield* FlutterBlue.instance._methodStream
+        .where((m) => m.method == "MtuSize")
+        .map((m) => m.arguments)
+        .map((buffer) => new protos.MtuSizeResponse.fromBuffer(buffer))
+        .where((p) => p.remoteId == id.toString())
+        .map((p) => p.mtu);
+  }
+  
   Future<void> requestMtu(int desiredMtu) async {
     var request = protos.MtuSizeRequest.create()
       ..remoteId = id.toString()
