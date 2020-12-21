@@ -1146,6 +1146,16 @@ catch(InterruptedException e)
         public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
 		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
+		if(status == BluetoothGatt.GATT_SUCCESS) {
+                if(mDevices.containsKey(gatt.getDevice().getAddress())) {
+                    BluetoothDeviceCache cache = mDevices.get(gatt.getDevice().getAddress());
+                    cache.mtu = mtu;
+                    Protos.MtuSizeResponse.Builder p = Protos.MtuSizeResponse.newBuilder();
+                    p.setRemoteId(gatt.getDevice().getAddress());
+                    p.setMtu(mtu);
+                    invokeMethodUIThread("MtuSize", p.build().toByteArray());
+                }
+            }
 	    	
         }
     };
@@ -1170,6 +1180,16 @@ catch(InterruptedException e)
     private void log(LogLevel level, String message) {
         if(level.ordinal() <= logLevel.ordinal()) {
             Log.d(TAG, message);
+        }
+    }
+	
+  class BluetoothDeviceCache {
+        final BluetoothGatt gatt;
+        int mtu;
+
+        BluetoothDeviceCache(BluetoothGatt gatt) {
+            this.gatt = gatt;
+            mtu = 20;
         }
     }
 
