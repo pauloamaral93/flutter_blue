@@ -483,8 +483,8 @@ catch(InterruptedException e)
                     gattServer = mGattServers.get(remoteId);
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			    
-		       if (gattServer.requestMtu(mtuValue)) {
-			    requestMtuCallback = callback;
+		       if (gattServer.requestMtu(size)) {
+			    requestMtuCallback = result;
 			} else {
 			    result.error("Could not initiate MTU request");
         		}
