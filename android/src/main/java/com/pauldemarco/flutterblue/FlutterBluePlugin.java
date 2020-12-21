@@ -484,7 +484,7 @@ catch(InterruptedException e)
                     if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			    
 		       if (gattServer.requestMtu(size)) {
-			    requestMtuCallback = result;
+			    
 			} else {
 			    result.error("Could not initiate MTU request");
         		}
@@ -1171,11 +1171,11 @@ catch(InterruptedException e)
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 		
 	if (status == BluetoothGatt.GATT_SUCCESS) {
-			    requestMtuCallback.success(mtu);
+			    result.success(mtu);
 			} else {
-			    requestMtuCallback.error("MTU request failed");
+			    result.error("MTU change failed");
 			}
-			requestMtuCallback = null;
+			
 	    	
         }
     };
