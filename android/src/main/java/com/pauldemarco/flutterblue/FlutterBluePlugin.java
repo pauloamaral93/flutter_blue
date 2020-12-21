@@ -1166,11 +1166,19 @@ catch(InterruptedException e)
 		 super.onMtuChanged(gatt, mtu, status);
             log(LogLevel.DEBUG, "[onMtuChanged] mtu: " + mtu + " status: " + status);
 		
-	if (status == BluetoothGatt.GATT_SUCCESS) {
+		 registrar.activity().runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        if (status == BluetoothGatt.GATT_SUCCESS) {
                             resultMTU.success(true);
                         } else {
                             resultMTU.error("requestMtu", "gatt.requestMtu returned false", null);
                         }
+                    }
+                });
+		
+	
 			
 			
 	    	
