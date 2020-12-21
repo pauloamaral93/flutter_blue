@@ -427,6 +427,42 @@ catch(InterruptedException e)
                 }
                 break;
             }
+			
+	  case "mtu":
+            {
+                Integer size = call.argument("size");
+                String remoteId = call.argument("remoteId");
+                if (size == null) {
+                    result.error(
+                            "ValueError",
+                            "\"size\" cannot be null!",
+                            null
+                    );
+                    return;
+                }
+
+                BluetoothGatt gattServer;
+                try {
+                    gattServer = mGattServers.get(remoteId);
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			 
+			    boolean re = gattServer.requestMtu(2000);
+			    Log.i(TAG, "MTU status is " + re);
+                        if(re) {
+                            result.success(true);
+                        } else {
+                            result.error("getMtu", "gatt.requestMtu returned false", null);
+                        }
+                    } else {
+                        result.error("gettMtu", "Only supported on devices >= API 21 (Lollipop). This device == " + Build.VERSION.SDK_INT, null);
+                    }
+                } catch(Exception e) {
+                    result.error("getMtu", e.getMessage(), e);
+                }
+                break;
+            }
+		
+			
 
             case "requestMtu": {
            
