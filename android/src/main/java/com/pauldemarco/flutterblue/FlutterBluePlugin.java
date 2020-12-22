@@ -910,7 +910,7 @@ catch(InterruptedException e)
             ScanFilter f = new ScanFilter.Builder().setServiceUuid(ParcelUuid.fromString(uuid)).build();
             filters.add(f);
         }
-        ScanSettings settings = new ScanSettings.Builder().setScanMode(scanMode).build();
+        ScanSettings settings = new ScanSettings.Builder().setScanMode(scanMode).setReportDelay(400).build();
         scanner.startScan(filters, settings, getScanCallback21());
     }
 
